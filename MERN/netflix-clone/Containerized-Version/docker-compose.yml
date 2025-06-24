@@ -1,0 +1,42 @@
+
+services:
+  mongo:
+    image: mongo:7.0
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+  backend:
+    build:
+      context: ./netflix-api
+    depends_on:
+      - mongo
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/netflix
+    volumes:
+      - ./netflix-api:/app
+    command: npm start
+
+  frontend:
+    build:
+      context: ./netflix-ui
+    ports:
+      - "3000:80"
+    environment:
+      - REACT_APP_TMDB_API_KEY=77025720124b35214d401096f916130b
+      # For Firebase, store config in env vars or .env and read in React app
+      - REACT_APP_FIREBASE_API_KEY=AIzaSyCEXtm-xO11pjD4TcyKj-t_FkEk8hA9v2A
+      - REACT_APP_FIREBASE_AUTH_DOMAIN=react-netflix-clone-3d788.firebaseapp.com
+      - REACT_APP_FIREBASE_PROJECT_ID=react-netflix-clone-3d788
+      - REACT_APP_FIREBASE_STORAGE_BUCKET=react-netflix-clone-3d788.appspot.com
+      - REACT_APP_FIREBASE_MESSAGING_SENDER_ID=1045966886525
+      - REACT_APP_FIREBASE_APP_ID=1:1045966886525:web:d8e024b5ce0209e2514314
+      - REACT_APP_FIREBASE_MEASUREMENT_ID=G-27PN5SC5WK
+    volumes:
+      - ./netflix-ui:/app
+volumes:
+  mongo_data:

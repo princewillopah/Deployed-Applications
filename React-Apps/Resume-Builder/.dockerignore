@@ -1,0 +1,45 @@
+
+# Ignore node_modules directory
+node_modules/
+
+# Ignore build directory
+build/
+dist/
+
+# Ignore Dockerfile and docker-compose files
+Dockerfile
+docker-compose.yml
+
+# Ignore git files
+.git
+
+# Ignore IDE and editor files
+.vscode/
+.idea/
+
+# Ignore OS files
+Thumbs.db
+.DS_Store
+
+# Ignore environment files
+.env
+.env.local
+.env.development
+.env.test
+.env.production 
+
+README.md
+
+# Ignore logs and tmp files
+logs/
+tmp/
+
+# Ignore npm debug logs
+npm-debug.log*
+
+# Ignore yarn debug logs
+yarn-debug.log*
+
+# Ignore yarn and npm lock files
+yarn.lock
+package-lock.json
