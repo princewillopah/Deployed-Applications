@@ -1,0 +1,54 @@
+# Node.js dependencies
+**/node_modules/
+
+**/*.pem
+
+# Docker-related files (if not version-controlled)
+**/docker-compose.override.yml
+**/.docker/
+
+# Ignore log files
+**/*.log
+**/logs/
+
+# Environment variable files
+**/.env
+**/.env.*
+
+# OS / Editor junk files
+**/.DS_Store
+**/Thumbs.db
+**/desktop.ini
+**/.vscode/
+**/.idea/
+**/*~ 
+
+# Ignore nested .git folders (for sub-repos you don't want)
+**/.git/
+
+# Ignore build/dist directories if applicable
+**/dist/
+**/build/
+
+# Optional: Ignore Docker images and volumes data directories if generated locally
+**/data/
+**/volumes/
+
+# Ignore coverage/test result folders
+**/coverage/
+**/test-results/
+
+# Ignore temp files
+**/tmp/
+**/temp/
+**/*.swp
+**/.cache/
+
+# Ignore database dump files
+**/*.sql
+**/*.sqlite
+**/*.db
+
+# If you don't want to version control Dockerfiles and docker-compose files, uncomment below:
+# **/Dockerfile
+# **/docker-compose.yml

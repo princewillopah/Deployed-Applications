@@ -1,0 +1,53 @@
+# Ignore files and directories
+
+# Operating system files
+*.tmp
+*.bak
+*.swp
+*.lock
+*.pid
+
+# Version control systems
+.git
+.gitignore
+.svn
+.hg
+.bzr
+
+# IDEs and editors
+.idea
+.vscode
+.eclipse
+.netbeans
+.intellij
+
+# Logs and debug files
+logs
+debug.log
+error.log
+
+# Build and compilation files
+build
+target
+node_modules
+vendor
+dist
+
+# Miscellaneous files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.bak
+*.old
+*.orig
+*.rej
+*.swo
+*.swn
+*.swp
+*.svn-base
+
+# Docker-specific files
+docker-compose.yml
+docker-compose.override.yml
+Dockerfile
