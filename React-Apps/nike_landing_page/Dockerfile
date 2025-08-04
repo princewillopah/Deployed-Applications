@@ -14,7 +14,7 @@ RUN npm install
 
 # Copy the rest of the application code to /app
 COPY . .
-
+COPY index.html /.
 
 # Expose desired port (assuming you're previewing via vite preview)
 EXPOSE 4173
