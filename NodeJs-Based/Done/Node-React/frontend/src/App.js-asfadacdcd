@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams, useNavigate } from 'react-router-dom';
 import { 
@@ -52,8 +53,7 @@ function Home() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleSearch = (e) => {
-    e.preventDefault();
+  useEffect(() => {
     const url = searchTerm 
       ? `http://localhost:5000/api/products/search?q=${searchTerm}`
       : 'http://localhost:5000/api/products';
@@ -61,13 +61,7 @@ function Home() {
     axios.get(url)
       .then(response => setProducts(response.data.slice(0, 6)))
       .catch(error => console.error('Error:', error));
-  };
-
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/products')
-      .then(response => setProducts(response.data.slice(0, 6)))
-      .catch(error => console.error('Error:', error));
-  }, []);
+  }, [searchTerm]);
 
   return (
     <Box sx={{ 
@@ -80,28 +74,26 @@ function Home() {
     }}>
       <Typography variant="h2" gutterBottom>Welcome to LuxeCart</Typography>
       
-      <form onSubmit={handleSearch}>
-        <TextField
-          variant="outlined"
-          placeholder="Search products..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          sx={{ 
-            width: '60%',
-            backgroundColor: 'white',
-            borderRadius: 1
-          }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton type="submit">
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </form>
+      <TextField
+        variant="outlined"
+        placeholder="Search products..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        sx={{ 
+          width: '60%',
+          backgroundColor: 'white',
+          borderRadius: 1
+        }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton>
+                <SearchIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
 
       <Container sx={{ py: 4 }}>
         <Typography variant="h4" gutterBottom>
@@ -123,8 +115,7 @@ function Products() {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const handleSearch = (e) => {
-    e.preventDefault();
+  useEffect(() => {
     const url = searchTerm 
       ? `http://localhost:5000/api/products/search?q=${searchTerm}`
       : 'http://localhost:5000/api/products';
@@ -132,13 +123,7 @@ function Products() {
     axios.get(url)
       .then(response => setProducts(response.data))
       .catch(error => console.error('Error:', error));
-  };
-
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/products')
-      .then(response => setProducts(response.data))
-      .catch(error => console.error('Error:', error));
-  }, []);
+  }, [searchTerm]);
 
   const handleDelete = (id) => {
     axios.delete(`http://localhost:5000/api/products/${id}`)
@@ -150,25 +135,23 @@ function Products() {
     <Container sx={{ py: 4 }}>
       <Typography variant="h4" gutterBottom>All Products</Typography>
       
-      <form onSubmit={handleSearch}>
-        <TextField
-          fullWidth
-          variant="outlined"
-          placeholder="Search products..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          sx={{ mb: 4 }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton type="submit">
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
-      </form>
+      <TextField
+        fullWidth
+        variant="outlined"
+        placeholder="Search products..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        sx={{ mb: 4 }}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton>
+                <SearchIcon />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
 
       <Grid container spacing={4}>
         {products.map(product => (
@@ -213,6 +196,7 @@ function ProductCard({ product, onDelete, showActions = false }) {
     </Card>
   );
 }
+
 
 function ProductDetail() {
   const { id } = useParams();
@@ -293,7 +277,7 @@ function AddProduct() {
 
   return (
     <Container maxWidth="sm">
-      <Paper elevation={3} sx={{ p: 4, my: 4 }}>
+      <StyledFormContainer>
         <Typography variant="h4" align="center" gutterBottom>
           Add New Product
         </Typography>
@@ -356,7 +340,7 @@ function AddProduct() {
             Add Product
           </Button>
         </form>
-      </Paper>
+      </StyledFormContainer>
     </Container>
   );
 }
@@ -394,7 +378,7 @@ function EditProduct() {
 
   return (
     <Container maxWidth="sm">
-      <Paper elevation={3} sx={{ p: 4, my: 4 }}>
+      <StyledFormContainer>
         <Typography variant="h4" align="center" gutterBottom>
           Edit Product
         </Typography>
@@ -457,30 +441,9 @@ function EditProduct() {
             Update Product
           </Button>
         </form>
-      </Paper>
+      </StyledFormContainer>
     </Container>
   );
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

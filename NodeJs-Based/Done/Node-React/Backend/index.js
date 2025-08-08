@@ -265,20 +265,27 @@ app.delete('/api/products/:id', (req, res) => {
 });
 
 // Search Products
+// Add this to your existing backend routes
 app.get('/api/products/search', (req, res) => {
-    const searchTerm = req.query.q.toLowerCase();
-    if (!searchTerm) {
-      return res.status(400).json({ message: 'Search term is required' });
+    try {
+      const searchTerm = req.query.q ? req.query.q.toLowerCase() : '';
+      
+      if (!searchTerm.trim()) {
+        return res.status(400).json({ message: 'Search term is required' });
+      }
+  
+      const results = products.filter(product => 
+        product.name.toLowerCase().includes(searchTerm) ||
+        product.description.toLowerCase().includes(searchTerm) ||
+        (product.category && product.category.toLowerCase().includes(searchTerm))
+      );
+  
+      res.json(results);
+    } catch (error) {
+      console.error('Search error:', error);
+      res.status(500).json({ message: 'Internal server error' });
     }
-  
-    const results = products.filter(product => 
-      product.name.toLowerCase().includes(searchTerm) ||
-      product.description.toLowerCase().includes(searchTerm) ||
-      product.category.toLowerCase().includes(searchTerm)
-    );
-  
-    res.json(results);
-  });
+  });;
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
