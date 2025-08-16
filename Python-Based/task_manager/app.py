@@ -1,0 +1,78 @@
+# app.py
+from flask import Flask, render_template, request, redirect, url_for
+import psycopg2
+from config import DATABASE_CONFIG
+
+app = Flask(__name__)
+
+def get_db_connection():
+    conn = psycopg2.connect(**DATABASE_CONFIG)
+    return conn
+
+@app.route('/')
+def index():
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id, title, description, due_date, completed FROM tasks ORDER BY id;")
+    tasks = cur.fetchall()
+    cur.close()
+    conn.close()
+    return render_template('index.html', tasks=tasks)
+
+@app.route('/create', methods=['GET', 'POST'])
+def create():
+    if request.method == 'POST':
+        title = request.form['title']
+        description = request.form['description']
+        due_date = request.form['due_date']
+        print(f"Creating task: {title}, {description}, {due_date}")  # Debug line
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO tasks (title, description, due_date, completed) VALUES (%s, %s, %s, %s);",
+            (title, description, due_date, False)
+        )
+        conn.commit()
+        cur.close()
+        conn.close()
+        return redirect(url_for('index'))
+    return render_template('edit.html', task=None)
+
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit(id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+    if request.method == 'POST':
+        title = request.form['title']
+        description = request.form['description']
+        due_date = request.form['due_date']
+        completed = 'completed' in request.form
+        print(f"Updating task {id}: {title}, completed={completed}")  # Debug
+        cur.execute(
+            "UPDATE tasks SET title = %s, description = %s, due_date = %s, completed = %s WHERE id = %s;",
+            (title, description, due_date, completed, id)
+        )
+        conn.commit()
+        cur.close()
+        conn.close()
+        return redirect(url_for('index'))
+    else:
+        cur.execute("SELECT id, title, description, due_date, completed FROM tasks WHERE id = %s;", (id,))
+        task = cur.fetchone()
+        cur.close()
+        conn.close()
+        return render_template('edit.html', task=task)
+
+@app.route('/delete/<int:id>', methods=['POST'])
+def delete(id):
+    print(f"Deleting task {id}")  # Debug
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM tasks WHERE id = %s;", (id,))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return redirect(url_for('index'))
+
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0', port=5000)

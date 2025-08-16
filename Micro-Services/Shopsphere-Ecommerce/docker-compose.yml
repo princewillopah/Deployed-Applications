@@ -1,0 +1,79 @@
+# docker-compose.yml
+services:
+  mongo:
+    image: mongo:latest
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - shopsphere-net
+
+  user-service:
+    build: ./user-service
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/shopsphere-users
+      - JWT_SECRET=your_strong_secret_here
+    depends_on:
+      - mongo
+    networks:
+      - shopsphere-net
+
+  product-service:
+    build: ./product-service
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/shopsphere-products
+      - JWT_SECRET=your_strong_secret_here
+    depends_on:
+      - mongo
+    networks:
+      - shopsphere-net
+
+  order-service:
+    build: ./order-service
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/shopsphere-orders
+      - JWT_SECRET=your_strong_secret_here
+    depends_on:
+      - mongo
+    networks:
+      - shopsphere-net
+
+  review-service:
+    build: ./review-service
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/shopsphere-reviews
+      - JWT_SECRET=your_strong_secret_here
+    depends_on:
+      - mongo
+    networks:
+      - shopsphere-net
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    networks:
+      - shopsphere-net
+
+
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - user-service
+      - product-service
+      - order-service
+      - review-service
+      - frontend
+    networks:
+      - shopsphere-net
+
+volumes:
+  mongo-data:
+
+networks:
+  shopsphere-net:
+    driver: bridge

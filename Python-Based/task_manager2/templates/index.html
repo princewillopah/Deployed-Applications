@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="text-3xl font-bold text-gray-900 mb-8">Your Tasks</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {% for task in tasks %}
+  <div class="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border-l-8
+              {% if task[4] %}border-green-500{% else %}border-indigo-500{% endif %}">
+    <div class="flex justify-between items-start mb-3">
+      <h3 class="text-lg font-semibold text-gray-800">{{ task[1] }}</h3>
+      <span class="text-xs font-bold px-2 py-1 rounded-full
+                  {% if task[4] %}bg-green-100 text-green-800{% else %}bg-indigo-100 text-indigo-800{% endif %}">
+        {{ 'Done' if task[4] else 'Pending' }}
+      </span>
+    </div>
+    <p class="text-gray-600 text-sm mb-4 line-clamp">{{ task[2] or 'No description' }}</p>
+    <div class="text-xs text-gray-500 mb-5">
+      {% if task[3] %}
+        <span>📅 Due: <strong>{{ task[3] }}</strong></span>
+      {% else %}
+        <span>📅 No due date</span>
+      {% endif %}
+    </div>
+    <div class="flex space-x-2">
+      <a href="{{ url_for('edit', id=task[0]) }}"
+         class="text-indigo-600 hover:text-indigo-800 text-sm font-medium transition">Edit</a>
+      <form method="POST" action="{{ url_for('delete', id=task[0]) }}" class="inline"
+            onsubmit="return confirm('Delete this task?')">
+        <button type="submit" class="text-red-600 hover:text-red-800 text-sm font-medium transition">Delete</button>
+      </form>
+    </div>
+  </div>
+  {% else %}
+  <div class="col-span-full text-center py-10">
+    <p class="text-gray-500 text-lg">No tasks yet.</p>
+    <a href="{{ url_for('create') }}" class="mt-2 inline-block text-indigo-600 hover:underline font-medium">Create your first task</a>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

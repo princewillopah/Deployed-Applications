@@ -19,7 +19,6 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
-
 function App() {
   return (
     <Router>
@@ -55,8 +54,8 @@ function Home() {
   const handleSearch = (e) => {
     e.preventDefault();
     const url = searchTerm 
-      ? `http://localhost:5000/api/products/search?q=${searchTerm}`
-      : 'http://localhost:5000/api/products';
+      ? `${process.env.REACT_APP_URL}/api/products/search?q=${searchTerm}`
+      : `${process.env.REACT_APP_URL}/api/products`;
       
     axios.get(url)
       .then(response => setProducts(response.data.slice(0, 6)))
@@ -64,7 +63,7 @@ function Home() {
   };
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/products')
+    axios.get(`${process.env.REACT_APP_URL}/api/products`)
       .then(response => setProducts(response.data.slice(0, 6)))
       .catch(error => console.error('Error:', error));
   }, []);
@@ -126,8 +125,8 @@ function Products() {
   const handleSearch = (e) => {
     e.preventDefault();
     const url = searchTerm 
-      ? `http://localhost:5000/api/products/search?q=${searchTerm}`
-      : 'http://localhost:5000/api/products';
+      ? `${process.env.REACT_APP_URL}/api/products/search?q=${searchTerm}`
+      : `${process.env.REACT_APP_URL}/api/products`;
       
     axios.get(url)
       .then(response => setProducts(response.data))
@@ -135,13 +134,13 @@ function Products() {
   };
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/products')
+    axios.get(`${process.env.REACT_APP_URL}/api/products`)
       .then(response => setProducts(response.data))
       .catch(error => console.error('Error:', error));
   }, []);
 
   const handleDelete = (id) => {
-    axios.delete(`http://localhost:5000/api/products/${id}`)
+    axios.delete(`${process.env.REACT_APP_URL}/api/products/${id}`)
       .then(() => setProducts(products.filter(p => p.id !== id)))
       .catch(error => console.error('Error deleting:', error));
   };
@@ -219,7 +218,7 @@ function ProductDetail() {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/products/${id}`)
+    axios.get(`${process.env.REACT_APP_URL}/api/products/${id}`)
       .then(response => setProduct(response.data))
       .catch(error => console.error('Error fetching product:', error));
   }, [id]);
@@ -286,7 +285,7 @@ function AddProduct() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://localhost:5000/api/products', formData)
+    axios.post(`${process.env.REACT_APP_URL}/api/products`, formData)
       .then(() => navigate('/products'))
       .catch(error => console.error('Error adding product:', error));
   };
@@ -373,7 +372,7 @@ function EditProduct() {
   });
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/products/${id}`)
+    axios.get(`${process.env.REACT_APP_URL}/api/products/${id}`)
       .then(response => setFormData(response.data))
       .catch(error => console.error('Error fetching product:', error));
   }, [id]);
@@ -387,7 +386,7 @@ function EditProduct() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.put(`http://localhost:5000/api/products/${id}`, formData)
+    axios.put(`${process.env.REACT_APP_URL}/api/products/${id}`, formData)
       .then(() => navigate(`/products/${id}`))
       .catch(error => console.error('Error updating product:', error));
   };

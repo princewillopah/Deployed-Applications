@@ -1,0 +1,50 @@
+<!-- templates/edit.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="text-2xl font-semibold text-gray-800 mb-6">
+  {{ 'Edit Task' if task else 'Create New Task' }}
+</h2>
+
+<form method="POST"
+      action="{{ url_for('create') if not task else '' }}"
+      class="bg-white p-6 rounded-lg shadow">
+  <div class="mb-4">
+    <label class="block text-sm font-medium text-gray-700">Title</label>
+    <input type="text" name="title" value="{{ task[1] if task else '' }}"
+           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+           required>
+  </div>
+  <div class="mb-4">
+    <label class="block text-sm font-medium text-gray-700">Description</label>
+    <textarea name="description" rows="3"
+              class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+      {{ task[2] if task else '' }}
+    </textarea>
+  </div>
+  <div class="mb-4">
+    <label class="block text-sm font-medium text-gray-700">Due Date</label>
+    <input type="date" name="due_date" value="{{ task[3] if task else '' }}"
+           class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+  </div>
+  {% if task %}
+  <div class="mb-4">
+    <label class="inline-flex items-center">
+      <input type="checkbox" name="completed" {% if task[4] %}checked{% endif %}
+             class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
+      <span class="ml-2 text-sm text-gray-700">Mark as completed</span>
+    </label>
+  </div>
+  {% endif %}
+  <div class="flex justify-end space-x-3">
+    <a href="{{ url_for('index') }}"
+       class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+      Cancel
+    </a>
+    <button type="submit"
+            class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md text-sm font-medium">
+      Save
+    </button>
+  </div>
+</form>
+{% endblock %}
