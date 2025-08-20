@@ -1,0 +1,47 @@
+# .dockerignore - Production-Grade
+
+# Ignore everything by default
+**
+
+# Allow frontend files
+!frontend/
+!frontend/package.json
+!frontend/package-lock.json
+!frontend/src/
+!frontend/src/**
+!frontend/public/
+!frontend/public/**
+!frontend/Dockerfile
+!frontend/nginx.conf
+
+# Allow services
+!services/
+!services/*/package.json
+!services/*/package-lock.json
+!services/*/server.js
+!services/*/Dockerfile
+
+# Allow nginx config
+!nginx/
+!nginx/nginx.conf
+!nginx/proxy_params
+
+# Allow docker-compose
+!docker-compose.yml
+!.env
+!.dockerignore
+
+# Ignore node_modules everywhere
+**/node_modules
+**/node_modules/**
+
+# Ignore logs, cache
+logs
+*.log
+npm-debug.log*
+coverage
+.DS_Store
+.git
+.gitignore
+README.md
+Dockerfile
